@@ -15,6 +15,7 @@
       --muted:#5b6b6b;
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -28,6 +29,7 @@
       justify-content:center;
       padding:32px;
       gap:24px;
+      overflow-x:hidden;
     }
     .card{
       width:min(780px, 70vw);
@@ -36,6 +38,16 @@
       padding:28px 36px 32px;
       box-shadow:0 14px 40px rgba(0,0,0,.10);
       border:1px solid rgba(15,26,26,.06);
+      animation:slideIn 0.6s ease-out;
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 50px rgba(10,163,127,.15);
+    }
+    @keyframes slideIn{
+      from{opacity:0; transform:translateY(20px)}
+      to{opacity:1; transform:translateY(0)}
     }
     .title{
       text-align:center;
@@ -43,6 +55,10 @@
       font-size:32px;
       letter-spacing:.2px;
       margin:4px 0 6px;
+      background:linear-gradient(135deg, #0aa37f, #064c3a);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
     }
     .subtitle{
       text-align:center;
@@ -53,31 +69,85 @@
       justify-content:center;
       align-items:center;
       flex-wrap:wrap;
+      animation:fadeIn 0.8s ease-out 0.2s both;
+    }
+    @keyframes fadeIn{
+      from{opacity:0}
+      to{opacity:1}
     }
     .pill{
       color:#0b6b55;
       background:var(--accent-soft);
       border:1px solid rgba(10,163,127,.25);
       border-radius:999px;
-      padding:3px 10px;
+      padding:6px 14px;
       font-weight:600;
+      transition:all 0.3s ease;
+      cursor:pointer;
+    }
+    .pill:hover{
+      background:#0aa37f;
+      color:white;
+      transform:scale(1.05);
     }
     h3{
       margin:24px 0 10px;
       letter-spacing:.4px;
       color:#0b3b34;
+      position:relative;
+      padding-bottom:8px;
     }
-    p{color:#213131; line-height:1.7; margin:0}
+    h3::after{
+      content:'';
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:40px;
+      height:3px;
+      background:linear-gradient(90deg, #0aa37f, transparent);
+      border-radius:999px;
+    }
+    p{color:#213131; line-height:1.8; margin:0; transition:color 0.3s ease}
+    p:hover{color:#0aa37f}
     ul{margin:8px 0 0 18px; color:#213131}
-    li{margin:6px 0}
-    .section{margin-top:14px}
-    .contact{margin-top:14px}
-    a{color:#0a8166; text-decoration:none; font-weight:600}
-    a:hover{text-decoration:underline}
+    li{margin:8px 0; transition:all 0.3s ease; padding-left:8px}
+    li:hover{color:#0aa37f; padding-left:16px}
+    .section{
+      margin-top:20px;
+      animation:slideIn 0.6s ease-out;
+      animation-fill-mode:both;
+    }
+    .section:nth-child(2){animation-delay:0.1s}
+    .section:nth-child(3){animation-delay:0.2s}
+    .section:nth-child(4){animation-delay:0.3s}
+    .section:nth-child(5){animation-delay:0.4s}
+    .contact{margin-top:24px}
+    a{
+      color:#0a8166;
+      text-decoration:none;
+      font-weight:600;
+      position:relative;
+      transition:color 0.3s ease;
+    }
+    a::after{
+      content:'';
+      position:absolute;
+      bottom:-2px;
+      left:0;
+      width:0;
+      height:2px;
+      background:#0a8166;
+      transition:width 0.3s ease;
+    }
+    a:hover{color:#064c3a}
+    a:hover::after{width:100%}
 
     /* Weather card styled to match */
     #weather-panel{
       width:280px;
+      position:sticky;
+      top:32px;
+      animation:slideIn 0.6s ease-out 0.1s both;
     }
     #weather-title{
       font-size:0.9rem;
@@ -92,43 +162,75 @@
       background:#ffffff;
       border:1px solid rgba(0,0,0,0.04);
       box-shadow:0 18px 40px rgba(0,0,0,0.08);
+      transition:all 0.4s ease;
+    }
+    #weather-box:hover{
+      box-shadow:0 25px 50px rgba(10,163,127,.2);
+      transform:translateY(-2px);
     }
     #status{
-      margin-bottom:8px;
+      margin-bottom:12px;
       font-size:0.85rem;
       color:#4e6666;
+      font-weight:500;
     }
     #weather-data{
       font-size:0.9rem;
-      line-height:0.5;
+      line-height:1.6;
       color:#153333;
-      background:#e8faf6;
-      border-radius:10px;
-      padding:10px 12px;
+      background:linear-gradient(135deg, #e8faf6 0%, #f0fbf9 100%);
+      border-radius:12px;
+      padding:14px 12px;
       border:1px solid rgba(6,179,137,0.24);
-      white-space:pre-wrap;
+      margin-bottom:12px;
+      transition:all 0.3s ease;
+    }
+    #weather-data:hover{
+      border-color:rgba(6,179,137,0.5);
+      box-shadow:0 4px 12px rgba(10,163,127,.1);
+    }
+    #weather-data > div{
+      margin:6px 0;
+      transition:all 0.3s ease;
+    }
+    #weather-data > div:hover{
+      padding-left:6px;
+      color:#0aa37f;
     }
     .weather-pill-row{
-      margin-top:10px;
+      margin-top:14px;
       display:flex;
       flex-wrap:wrap;
       gap:8px;
     }
     .weather-pill{
       font-size:0.8rem;
-      padding:4px 10px;
+      padding:6px 12px;
       border-radius:999px;
       background:#e3f7fb;
       color:#0b6b55;
-      border:1px solid rgba(0,171,155,0.35);
+      border:1.5px solid rgba(0,171,155,0.35);
       font-weight:600;
+      transition:all 0.3s ease;
+      cursor:pointer;
+    }
+    .weather-pill:hover{
+      background:#0aa37f;
+      color:white;
+      transform:scale(1.08);
+      border-color:#0aa37f;
     }
     #map {
       height: 280px;
       width: 100%;
-      border-radius: 10px;
-      margin-top: 12px;
-      border: 1px solid rgba(6,179,137,0.24);
+      border-radius: 12px;
+      margin-top: 14px;
+      border: 1.5px solid rgba(6,179,137,0.24);
+      transition:all 0.3s ease;
+      box-shadow:0 4px 12px rgba(0,0,0,0.06);
+    }
+    #map:hover{
+      box-shadow:0 8px 20px rgba(10,163,127,.15);
     }
     @media (max-width:900px){
       body{
@@ -142,6 +244,8 @@
       #weather-panel{
         width:100%;
         max-width:420px;
+        position:relative;
+        top:0;
       }
     }
   </style>
@@ -165,20 +269,20 @@
     <section class="section">
       <h3>HOBBIES</h3>
       <ul>
-        <li>Coding</li>
-        <li>Chess</li>
-        <li>Gym</li>
-        <li>Gaming</li>
-        <li>Volleyball</li>
+        <li>💻 Coding</li>
+        <li>♟️ Chess</li>
+        <li>💪 Gym</li>
+        <li>🎮 Gaming</li>
+        <li>🏐 Volleyball</li>
       </ul>
     </section>
 
     <section class="section">
       <h3>GOALS</h3>
       <ul>
-        <li>Become a successful entrepreneur.</li>
-        <li>Pursue my MBA from IIM Ahmedabad.</li>
-        <li>Continuously learn and grow in computer science.</li>
+        <li>🚀 Become a successful entrepreneur.</li>
+        <li>📚 Pursue my MBA from IIM Ahmedabad.</li>
+        <li>🎓 Continuously learn and grow in computer science.</li>
       </ul>
     </section>
 
@@ -190,14 +294,14 @@
 
   <!-- Weather card -->
   <aside id="weather-panel">
-    <h2 id="weather-title">CURRENT WEATHER</h2>
+    <h2 id="weather-title">🌤️ CURRENT WEATHER</h2>
     <div id="weather-box">
       <div id="status">Requesting location…</div>
       <div id="weather-data"></div>
       <div id="map"></div>
       <div class="weather-pill-row">
-        <span class="weather-pill">Auto location</span>
-        <span class="weather-pill">Live update</span>
+        <span class="weather-pill">📍 Auto location</span>
+        <span class="weather-pill">🔄 Live update</span>
       </div>
     </div>
   </aside>
@@ -219,24 +323,23 @@
 
     async function updateWeather(lat, lon) {
       try {
-        statusEl.textContent = 'Fetching weather…';
+        statusEl.textContent = '⏳ Fetching weather…';
         const data = await fetchWeatherByCoords(lat, lon);
         statusEl.textContent =
-          `Last update: ${new Date().toLocaleTimeString()}  •  Location: ${data.location.name}, ${data.location.country}`;
+          `✅ Last update: ${new Date().toLocaleTimeString()}  •  📍 ${data.location.name}, ${data.location.country}`;
 
         const icon = data.current.condition.icon.startsWith('//')
           ? 'https:' + data.current.condition.icon
           : data.current.condition.icon;
 
         weatherEl.innerHTML = `
-          <div><strong>Temperature:</strong> ${data.current.temp_c} °C</div>
-          <div><strong>Condition:</strong> ${data.current.condition.text} <img src="${icon}" alt="${data.current.condition.text}" style="vertical-align:middle;height:20px;margin-left:6px"></div>
-          <div><strong>Feels like:</strong> ${data.current.feelslike_c} °C</div>
-          <div><strong>Humidity:</strong> ${data.current.humidity}%</div>
-          <div><strong>Wind:</strong> ${data.current.wind_kph} kph</div>
+          <div><strong>🌡️ Temperature:</strong> ${data.current.temp_c}°C</div>
+          <div><strong>☁️ Condition:</strong> ${data.current.condition.text} <img src="${icon}" alt="${data.current.condition.text}" style="vertical-align:middle;height:20px;margin-left:6px"></div>
+          <div><strong>🤔 Feels like:</strong> ${data.current.feelslike_c}°C</div>
+          <div><strong>💧 Humidity:</strong> ${data.current.humidity}%</div>
+          <div><strong>💨 Wind:</strong> ${data.current.wind_kph} kph</div>
         `;
 
-        // Initialize or update map
         if (!mapInstance) {
           mapInstance = L.map('map').setView([lat, lon], 16);
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -251,14 +354,14 @@
         }
         L.marker([lat, lon]).addTo(mapInstance).bindPopup(`<b>${data.location.name}</b><br>${data.location.region}, ${data.location.country}`);
       } catch (err) {
-        statusEl.textContent = 'Weather error: ' + err.message;
+        statusEl.textContent = '❌ Weather error: ' + err.message;
         console.error(err);
       }
     }
 
     function requestLocation() {
       if (!navigator.geolocation) {
-        statusEl.textContent = 'Geolocation not supported.';
+        statusEl.textContent = '❌ Geolocation not supported.';
         return;
       }
       navigator.geolocation.getCurrentPosition(
@@ -267,7 +370,7 @@
           updateWeather(latitude, longitude);
         },
         (error) => {
-          statusEl.textContent = 'Location access denied.';
+          statusEl.textContent = '❌ Location access denied.';
         }
       );
     }

@@ -314,6 +314,11 @@
     const weatherEl = document.getElementById('weather-data');
     let mapInstance = null;
 
+    // Your location (hardcoded for map)
+    const yourLocation = { lat: 12.955057, lon: 77.696196 };
+    // Bangalore (for weather)
+    const bangaloreCoords = { lat: 12.9716, lon: 77.5946 };
+
     async function fetchWeatherByCoords(lat, lon) {
       const url = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}`;
       const res = await fetch(url);
@@ -326,7 +331,7 @@
         statusEl.textContent = '⏳ Fetching weather…';
         const data = await fetchWeatherByCoords(lat, lon);
         statusEl.textContent =
-          `✅ Last update: ${new Date().toLocaleTimeString()}  •  📍 ${data.location.name}, ${data.location.country}`;
+          `✅ Last update: ${new Date().toLocaleTimeString()}  •  📍 ${data.location.name}`;
 
         const icon = data.current.condition.icon.startsWith('//')
           ? 'https:' + data.current.condition.icon
@@ -340,43 +345,28 @@
           <div><strong>💨 Wind:</strong> ${data.current.wind_kph} kph</div>
         `;
 
+        // Map shows YOUR location (not weather location)
         if (!mapInstance) {
-          mapInstance = L.map('map').setView([lat, lon], 16);
+          mapInstance = L.map('map').setView([yourLocation.lat, yourLocation.lon], 16);
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(mapInstance);
-        } else {
-          mapInstance.setView([lat, lon], 16);
-          mapInstance.eachLayer(layer => {
-            if (layer instanceof L.Marker) mapInstance.removeLayer(layer);
-          });
+          L.marker([yourLocation.lat, yourLocation.lon]).addTo(mapInstance).bindPopup(`<b>Your Location</b>`);
         }
-        L.marker([lat, lon]).addTo(mapInstance).bindPopup(`<b>${data.location.name}</b><br>${data.location.region}, ${data.location.country}`);
       } catch (err) {
         statusEl.textContent = '❌ Weather error: ' + err.message;
         console.error(err);
       }
     }
 
-    function requestLocation() {
-      if (!navigator.geolocation) {
-        statusEl.textContent = '❌ Geolocation not supported.';
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          updateWeather(latitude, longitude);
-        },
-        (error) => {
-          statusEl.textContent = '❌ Location access denied.';
-        }
-      );
-    }
-
-    requestLocation();
-    setInterval(requestLocation, 10 * 60 * 1000);
+    // Load Bangalore weather, map shows your location
+    updateWeather(bangaloreCoords.lat, bangaloreCoords.lon);
+    
+    // Refresh every 10 minutes
+    setInterval(() => {
+      updateWeather(bangaloreCoords.lat, bangaloreCoords.lon);
+    }, 10 * 60 * 1000);
   </script>
 </body>
 </html>

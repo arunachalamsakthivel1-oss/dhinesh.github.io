@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dhinesh Profile + Weather</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    :root{
+      --bg:#dff4f6;
+      --card:#ffffff;
+      --accent:#0aa37f;
+      --accent-soft:#e3f6f1;
+      --text:#0f1a1a;
+      --muted:#5b6b6b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 20% -10%, #e9fbff 20%, transparent 60%),
+                  radial-gradient(900px 500px at 110% 10%, #e6faf5 15%, transparent 60%),
+                  var(--bg);
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:32px;
+      gap:24px;
+    }
+    .card{
+      width:min(780px, 70vw);
+      background:var(--card);
+      border-radius:18px;
+      padding:28px 36px 32px;
+      box-shadow:0 14px 40px rgba(0,0,0,.10);
+      border:1px solid rgba(15,26,26,.06);
+    }
+    .title{
+      text-align:center;
+      font-weight:800;
+      font-size:32px;
+      letter-spacing:.2px;
+      margin:4px 0 6px;
+    }
+    .subtitle{
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .pill{
+      color:#0b6b55;
+      background:var(--accent-soft);
+      border:1px solid rgba(10,163,127,.25);
+      border-radius:999px;
+      padding:3px 10px;
+      font-weight:600;
+    }
+    h3{
+      margin:24px 0 10px;
+      letter-spacing:.4px;
+      color:#0b3b34;
+    }
+    p{color:#213131; line-height:1.7; margin:0}
+    ul{margin:8px 0 0 18px; color:#213131}
+    li{margin:6px 0}
+    .section{margin-top:14px}
+    .contact{margin-top:14px}
+    a{color:#0a8166; text-decoration:none; font-weight:600}
+    a:hover{text-decoration:underline}
+
+    /* Weather card styled to match */
+    #weather-panel{
+      width:280px;
+    }
+    #weather-title{
+      font-size:0.9rem;
+      font-weight:700;
+      letter-spacing:0.08em;
+      color:#064c3a;
+      margin-bottom:8px;
+    }
+    #weather-box{
+      padding:20px 18px;
+      border-radius:18px;
+      background:#ffffff;
+      border:1px solid rgba(0,0,0,0.04);
+      box-shadow:0 18px 40px rgba(0,0,0,0.08);
+    }
+    #status{
+      margin-bottom:8px;
+      font-size:0.85rem;
+      color:#4e6666;
+    }
+    #weather-data{
+      font-size:0.9rem;
+      line-height:0.5;
+      color:#153333;
+      background:#e8faf6;
+      border-radius:10px;
+      padding:10px 12px;
+      border:1px solid rgba(6,179,137,0.24);
+      white-space:pre-wrap;
+    }
+    .weather-pill-row{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .weather-pill{
+      font-size:0.8rem;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#e3f7fb;
+      color:#0b6b55;
+      border:1px solid rgba(0,171,155,0.35);
+      font-weight:600;
+    }
+    #map {
+      height: 280px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 12px;
+      border: 1px solid rgba(6,179,137,0.24);
+    }
+    @media (max-width:900px){
+      body{
+        flex-direction:column;
+        align-items:center;
+      }
+      .card{
+        width:100%;
+        max-width:780px;
+      }
+      #weather-panel{
+        width:100%;
+        max-width:420px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main profile card -->
+  <main class="card">
+    <h1 class="title">Dhinesh Gomathi Shankar Arunachalam</h1>
+    <div class="subtitle">
+      <span>average curly haired 6 ft guy 🙂</span>
+      <span class="pill">CS student</span>
+      <span class="pill">IIT Madras</span>
+    </div>
+
+    <section class="section">
+      <h3>ABOUT ME</h3>
+      <p>Hi! I'm Dhinesh, a 17-year-old computer science student at IIT Madras from Bangalore. I love coding and entrepreneurship and I always prefer smart work over hard work. I'm a Tamilian, well-versed in most South Indian languages and Hindi, and I pick things up fast.</p>
+    </section>
+
+    <section class="section">
+      <h3>HOBBIES</h3>
+      <ul>
+        <li>Coding</li>
+        <li>Chess</li>
+        <li>Gym</li>
+        <li>Gaming</li>
+        <li>Volleyball</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3>GOALS</h3>
+      <ul>
+        <li>Become a successful entrepreneur.</li>
+        <li>Pursue my MBA from IIM Ahmedabad.</li>
+        <li>Continuously learn and grow in computer science.</li>
+      </ul>
+    </section>
+
+    <section class="section contact">
+      <h3>CONTACT ME</h3>
+      <p>You can reach me at <a href="mailto:cs25b022@smail.iitm.ac.in">cs25b022@smail.iitm.ac.in</a></p>
+    </section>
+  </main>
+
+  <!-- Weather card -->
+  <aside id="weather-panel">
+    <h2 id="weather-title">CURRENT WEATHER</h2>
+    <div id="weather-box">
+      <div id="status">Requesting location…</div>
+      <div id="weather-data"></div>
+      <div id="map"></div>
+      <div class="weather-pill-row">
+        <span class="weather-pill">Auto location</span>
+        <span class="weather-pill">Live update</span>
+      </div>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const API_KEY = '9afd263c81ab4b7784c132842250112';
+    const statusEl = document.getElementById('status');
+    const weatherEl = document.getElementById('weather-data');
+    let mapInstance = null;
+
+    async function fetchWeatherByCoords(lat, lon) {
+      const url = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Weather request failed: ' + res.status);
+      return res.json();
+    }
+
+    async function updateWeather(lat, lon) {
+      try {
+        statusEl.textContent = 'Fetching weather…';
+        const data = await fetchWeatherByCoords(lat, lon);
+        statusEl.textContent =
+          `Last update: ${new Date().toLocaleTimeString()}  •  Location: ${data.location.name}, ${data.location.country}`;
+
+        const icon = data.current.condition.icon.startsWith('//')
+          ? 'https:' + data.current.condition.icon
+          : data.current.condition.icon;
+
+        weatherEl.innerHTML = `
+          <div><strong>Temperature:</strong> ${data.current.temp_c} °C</div>
+          <div><strong>Condition:</strong> ${data.current.condition.text} <img src="${icon}" alt="${data.current.condition.text}" style="vertical-align:middle;height:20px;margin-left:6px"></div>
+          <div><strong>Feels like:</strong> ${data.current.feelslike_c} °C</div>
+          <div><strong>Humidity:</strong> ${data.current.humidity}%</div>
+          <div><strong>Wind:</strong> ${data.current.wind_kph} kph</div>
+        `;
+
+        // Initialize or update map
+        if (!mapInstance) {
+          mapInstance = L.map('map').setView([lat, lon], 16);
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(mapInstance);
+        } else {
+          mapInstance.setView([lat, lon], 16);
+          mapInstance.eachLayer(layer => {
+            if (layer instanceof L.Marker) mapInstance.removeLayer(layer);
+          });
+        }
+        L.marker([lat, lon]).addTo(mapInstance).bindPopup(`<b>${data.location.name}</b><br>${data.location.region}, ${data.location.country}`);
+      } catch (err) {
+        statusEl.textContent = 'Weather error: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    function requestLocation() {
+      if (!navigator.geolocation) {
+        statusEl.textContent = 'Geolocation not supported.';
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          updateWeather(latitude, longitude);
+        },
+        (error) => {
+          statusEl.textContent = 'Location access denied.';
+        }
+      );
+    }
+
+    requestLocation();
+    setInterval(requestLocation, 10 * 60 * 1000);
+  </script>
+</body>
+</html>
